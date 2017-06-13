@@ -47,7 +47,7 @@
 /**
  * Possible errors
  */
-    "no-cond-assign": [2, "always"], // http://eslint.org/docs/rules/no-cond-assign
+    "no-cond-assign": [1, "always"], // http://eslint.org/docs/rules/no-cond-assign
     "no-console": 1,                 // http://eslint.org/docs/rules/no-console
     "no-debugger": 1,                // http://eslint.org/docs/rules/no-debugger
     "no-alert": 1,                   // http://eslint.org/docs/rules/no-alert
@@ -94,7 +94,7 @@
     "no-native-reassign": 2,         // http://eslint.org/docs/rules/no-native-reassign
     "no-new": 2,                     // http://eslint.org/docs/rules/no-new
     "no-new-func": 2,                // http://eslint.org/docs/rules/no-new-func
-    "no-new-wrappers": 2,            // http://eslint.org/docs/rules/no-new-wrappers
+    "no-new-wrappers": 1,            // http://eslint.org/docs/rules/no-new-wrappers
     "no-octal": 2,                   // http://eslint.org/docs/rules/no-octal
     "no-octal-escape": 2,            // http://eslint.org/docs/rules/no-octal-escape
     "no-param-reassign": 1,          // http://eslint.org/docs/rules/no-param-reassign
@@ -102,8 +102,8 @@
     "no-redeclare": 2,               // http://eslint.org/docs/rules/no-redeclare
     "no-return-assign": 2,           // http://eslint.org/docs/rules/no-return-assign
     "no-script-url": 2,              // http://eslint.org/docs/rules/no-script-url
-    "no-self-compare": 2,            // http://eslint.org/docs/rules/no-self-compare
-    "no-sequences": 2,               // http://eslint.org/docs/rules/no-sequences
+    "no-self-compare": 1,            // http://eslint.org/docs/rules/no-self-compare
+    "no-sequences": 1,               // http://eslint.org/docs/rules/no-sequences
     "no-throw-literal": 2,           // http://eslint.org/docs/rules/no-throw-literal
     "no-with": 2,                    // http://eslint.org/docs/rules/no-with
     "radix": 2,                      // http://eslint.org/docs/rules/radix
