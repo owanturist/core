@@ -1,7 +1,14 @@
-//import Maybe, Native.List, Native.Utils, Result //
+/* global
+	_elm_lang$core$Result$Err,
+	_elm_lang$core$Result$Ok,
+	_elm_lang$core$Maybe$Nothing,
+	_elm_lang$core$Maybe$Just,
+	_elm_lang$core$Native_List,
+	_elm_lang$core$Native_Utils
+*/
 
-var _elm_lang$core$Native_String = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_String = (function _elm_lang$core$Native_String() {
 function isEmpty(str)
 {
 	return str.length === 0;
@@ -15,8 +22,14 @@ function uncons(str)
 	var hd = str[0];
 	if (hd)
 	{
-		return _elm_lang$core$Maybe$Just(_elm_lang$core$Native_Utils.Tuple2(_elm_lang$core$Native_Utils.chr(hd), str.slice(1)));
+		return _elm_lang$core$Maybe$Just(
+			_elm_lang$core$Native_Utils.Tuple2(
+				_elm_lang$core$Native_Utils.chr(hd),
+				str.slice(1)
+			)
+		);
 	}
+	// eslint-disable-next-line camelcase
 	return _elm_lang$core$Maybe$Nothing;
 }
 function append(a, b)
@@ -225,8 +238,8 @@ function toInt(s)
 	{
 		for (var i = 2; i < len; ++i)
 		{
-			var c = s[i];
-			if (('0' <= c && c <= '9') || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f'))
+			var c_ = s[i];
+			if (('0' <= c_ && c_ <= '9') || ('A' <= c_ && c_ <= 'F') || ('a' <= c_ && c_ <= 'f'))
 			{
 				continue;
 			}
@@ -240,10 +253,10 @@ function toInt(s)
 	{
 		return intErr(s);
 	}
-	for (var i = 1; i < len; ++i)
+	for (var j = 1; j < len; ++j)
 	{
-		var c = s[i];
-		if (c < '0' || '9' < c)
+		var c__ = s[j];
+		if (c__ < '0' || '9' < c__)
 		{
 			return intErr(s);
 		}
@@ -335,5 +348,4 @@ return {
 	toList: toList,
 	fromList: fromList
 };
-
-}();
+})();
