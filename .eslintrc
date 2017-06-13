@@ -1,26 +1,28 @@
 {
-  "parser": "babel-eslint",          // https://github.com/babel/babel-eslint
   "plugins": [],
   "env": {                           // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
     "browser": true,                 // browser global variables
     "node": true                     // Node.js global variables and Node.js-specific rules
   },
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": false,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": false,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "spread": true,
-    "superInFunctions": true,
-    "templateStrings": true,
+  "globals": {
+    F1: true,
+    F2: true,
+    F3: true,
+    F4: true,
+    F5: true,
+    F6: true,
+    F7: true,
+    F8: true,
+    F9: true,
+    A1: true,
+    A2: true,
+    A3: true,
+    A4: true,
+    A5: true,
+    A6: true,
+    A7: true,
+    A8: true,
+    A9: true
   },
   "rules": {
 /**
@@ -34,9 +36,11 @@
  */
     "no-shadow": 2,                  // http://eslint.org/docs/rules/no-shadow
     "no-shadow-restricted-names": 2, // http://eslint.org/docs/rules/no-shadow-restricted-names
+    "no-undef": 2,
     "no-unused-vars": [2, {          // http://eslint.org/docs/rules/no-unused-vars
       "vars": "local",
-      "args": "after-used"
+      "args": "after-used",
+      "varsIgnorePattern": "[_elm_lang]"
     }],
     "no-use-before-define": 2,       // http://eslint.org/docs/rules/no-use-before-define
 
@@ -110,7 +114,12 @@
 /**
  * Style
  */
-    "indent": [2, "tab"],                // http://eslint.org/docs/rules/indent
+    "brace-style": [2, "allman", { // http://eslint.org/docs/rules/indent
+        "allowSingleLine": true
+    }],
+    "indent": [2, "tab", { // http://eslint.org/docs/rules/indent
+        "outerIIFEBody": 0
+    }],
     "quotes": [
       2, "single", "avoid-escape"    // http://eslint.org/docs/rules/quotes
     ],
@@ -131,7 +140,6 @@
     "no-multiple-empty-lines": [2, { // http://eslint.org/docs/rules/no-multiple-empty-lines
       "max": 2
     }],
-    "no-nested-ternary": 2,          // http://eslint.org/docs/rules/no-nested-ternary
     "no-new-object": 2,              // http://eslint.org/docs/rules/no-new-object
     "no-spaced-func": 2,             // http://eslint.org/docs/rules/no-spaced-func
     "no-trailing-spaces": 2,         // http://eslint.org/docs/rules/no-trailing-spaces
@@ -143,11 +151,10 @@
       "before": false,
       "after": true
     }],
-    "space-after-keywords": 2,       // http://eslint.org/docs/rules/space-after-keywords
+    "keyword-spacing": 2,
     "space-before-blocks": 2,        // http://eslint.org/docs/rules/space-before-blocks
     "space-before-function-paren": [2, "never"], // http://eslint.org/docs/rules/space-before-function-paren
     "space-infix-ops": 2,            // http://eslint.org/docs/rules/space-infix-ops
-    "space-return-throw-case": 2,    // http://eslint.org/docs/rules/space-return-throw-case
     "spaced-comment": [2, "always",  {// http://eslint.org/docs/rules/spaced-comment
       "exceptions": ["-", "+"],
       "markers": ["=", "!"]           // space here to support sprockets directives

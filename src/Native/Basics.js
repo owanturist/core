@@ -1,7 +1,7 @@
-//import Native.Utils //
+/* global _elm_lang$core$Native_Utils */
 
-var _elm_lang$core$Native_Basics = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Basics = (function _elm_lang$core$Native_Basics() {
 function div(a, b)
 {
 	return (a / b) | 0;
@@ -133,9 +133,8 @@ return {
 	ceiling: Math.ceil,
 	floor: Math.floor,
 	round: Math.round,
-	toFloat: function(x) { return x; },
+	toFloat: function toFloat(x) { return x; },
 	isNaN: isNaN,
 	isInfinite: isInfinite
 };
-
-}();
+})();
