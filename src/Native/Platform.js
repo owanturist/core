@@ -1,31 +1,52 @@
-//import //
+/* global
+	_elm_lang$virtual_dom$VirtualDom$program,
+	_elm_lang$core$Json_Decode$decodeValue,
+	_elm_lang$core$Native_Scheduler,
+	_elm_lang$core$Native_List,
+	_elm_lang$core$Native_Json,
+	_elm_lang$core$Native_Utils
+*/
 
-var _elm_lang$core$Native_Platform = function() {
-
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Platform = (function _elm_lang$core$Native_Platform() {
 // PROGRAMS
+
+function needFlag(moduleName)
+{
+	return (
+		'Are you trying to sneak a Never value into Elm? Trickster!\n'
+		+ 'It looks like ' + moduleName
+		+ '.main is defined with `programWithFlags` but has type `Program Never`.\n'
+		+ 'Use `program` instead if you do not want flags.'
+	);
+}
+
+function noNeedFlag(moduleName)
+{
+	return (
+		'The `' + moduleName + '` module does not need flags.\n' +
+		'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
+	);
+}
 
 function program(impl)
 {
-	return function(flagDecoder)
+	return function programDecode()
 	{
-		return function(object, moduleName)
+		return function programRun(object, moduleName)
 		{
-			object['worker'] = function worker(flags)
+			object.worker = function worker(flags)
 			{
 				if (typeof flags !== 'undefined')
 				{
-					throw new Error(
-						'The `' + moduleName + '` module does not need flags.\n'
-						+ 'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
-					);
+					throw new Error(noNeedFlag(moduleName));
 				}
 
 				return initialize(
 					impl.init,
 					impl.update,
 					impl.subscriptions,
-					renderer
+					renderer_
 				);
 			};
 		};
@@ -34,19 +55,15 @@ function program(impl)
 
 function programWithFlags(impl)
 {
-	return function(flagDecoder)
+	return function programDecode(flagDecoder)
 	{
-		return function(object, moduleName)
+		return function programRun(object, moduleName)
 		{
-			object['worker'] = function worker(flags)
+			object.worker = function worker(flags)
 			{
 				if (typeof flagDecoder === 'undefined')
 				{
-					throw new Error(
-						'Are you trying to sneak a Never value into Elm? Trickster!\n'
-						+ 'It looks like ' + moduleName + '.main is defined with `programWithFlags` but has type `Program Never`.\n'
-						+ 'Use `program` instead if you do not want flags.'
-					);
+					throw new Error(needFlag(moduleName));
 				}
 
 				var result = A2(_elm_lang$core$Native_Json.run, flagDecoder, flags);
@@ -63,22 +80,22 @@ function programWithFlags(impl)
 					impl.init(result._0),
 					impl.update,
 					impl.subscriptions,
-					renderer
+					renderer_
 				);
 			};
 		};
 	};
 }
 
-function renderer(enqueue, _)
+function renderer_()
 {
-	return function(_) {};
+	return function render() {};
 }
 
 
 // HTML TO PROGRAM
 
-function htmlToProgram(vnode)
+function htmlToProgram()
 {
 	var emptyBag = batch(_elm_lang$core$Native_List.Nil);
 	var noChange = _elm_lang$core$Native_Utils.Tuple2(
@@ -88,9 +105,9 @@ function htmlToProgram(vnode)
 
 	return _elm_lang$virtual_dom$VirtualDom$program({
 		init: noChange,
-		view: function(model) { return main; },
-		update: F2(function(msg, model) { return noChange; }),
-		subscriptions: function (model) { return emptyBag; }
+		view: function view() { return; },
+		update: F2(function update() { return noChange; }),
+		subscriptions: function subscriptions() { return emptyBag; }
 	});
 }
 
@@ -104,7 +121,8 @@ function initialize(init, update, subscriptions, renderer)
 	var updateView;
 
 	// init and update state in main process
-	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function job(callback)
+	{
 		var model = init._0;
 		updateView = renderer(enqueue, model);
 		var cmds = init._1;
@@ -115,7 +133,8 @@ function initialize(init, update, subscriptions, renderer)
 
 	function onMessage(msg, model)
 	{
-		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+		return _elm_lang$core$Native_Scheduler.nativeBinding(function job(callback)
+		{
 			var results = A2(update, msg, model);
 			model = results._0;
 			updateView(model);
@@ -205,7 +224,7 @@ function makeManager(info, callback)
 
 function sendToApp(router, msg)
 {
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function job(callback)
 	{
 		router.main(msg);
 		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
@@ -229,7 +248,8 @@ function spawnLoop(init, onMessage)
 
 	function loop(state)
 	{
-		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function(msg) {
+		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function job(msg)
+		{
 			return onMessage(msg, state);
 		});
 		return A2(andThen, loop, handleMsg);
@@ -245,7 +265,7 @@ function spawnLoop(init, onMessage)
 
 function leaf(home)
 {
-	return function(value)
+	return function leafValue(value)
 	{
 		return {
 			type: 'leaf',
@@ -269,7 +289,7 @@ function map(tagger, bag)
 		type: 'map',
 		tagger: tagger,
 		tree: bag
-	}
+	};
 }
 
 
@@ -335,11 +355,11 @@ function toEffect(isCmd, home, taggers, value)
 		return x;
 	}
 
-	var map = isCmd
+	var mapFn = isCmd
 		? effectManagers[home].cmdMap
 		: effectManagers[home].subMap;
 
-	return A2(map, applyTaggers, value)
+	return A2(mapFn, applyTaggers, value);
 }
 
 function insert(isCmd, newEffect, effects)
@@ -364,7 +384,11 @@ function checkPortName(name)
 {
 	if (name in effectManagers)
 	{
-		throw new Error('There can only be one port named `' + name + '`, but your program has multiple.');
+		throw new Error(
+			'There can only be one port named `'
+			+ name
+			+ '`, but your program has multiple.'
+		);
 	}
 }
 
@@ -383,7 +407,8 @@ function outgoingPort(name, converter)
 	return leaf(name);
 }
 
-var outgoingPortMap = F2(function cmdMap(tagger, value) {
+var outgoingPortMap = F2(function cmdMap(tagger, value)
+{
 	return value;
 });
 
@@ -396,7 +421,7 @@ function setupOutgoingPort(name)
 
 	var init = _elm_lang$core$Native_Scheduler.succeed(null);
 
-	function onEffects(router, cmdList, state)
+	function onEffects(router, cmdList)
 	{
 		while (cmdList.ctor !== '[]')
 		{
@@ -457,7 +482,7 @@ function incomingPort(name, converter)
 
 var incomingPortMap = F2(function subMap(tagger, finalTagger)
 {
-	return function(value)
+	return function subSubMap(value)
 	{
 		return tagger(finalTagger(value));
 	};
@@ -479,7 +504,7 @@ function setupIncomingPort(name, callback)
 	{
 		var postInitResult = postInitOnEffects(router, subList, state);
 
-		for(var i = 0; i < sentBeforeInit.length; i++)
+		for (var i = 0; i < sentBeforeInit.length; i++)
 		{
 			postInitSend(sentBeforeInit[i]);
 		}
@@ -490,7 +515,7 @@ function setupIncomingPort(name, callback)
 		return postInitResult;
 	}
 
-	function postInitOnEffects(router, subList, state)
+	function postInitOnEffects(router, subList)
 	{
 		subs = subList;
 		return init;
@@ -526,7 +551,12 @@ function setupIncomingPort(name, callback)
 		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
 		if (result.ctor === 'Err')
 		{
-			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
+			throw new Error(
+				'Trying to send an unexpected type of value through port `'
+				+ name
+				+ '`:\n'
+				+ result._0
+			);
 		}
 
 		currentSend(result._0);
@@ -555,5 +585,4 @@ return {
 	batch: batch,
 	map: F2(map)
 };
-
-}();
+})();
