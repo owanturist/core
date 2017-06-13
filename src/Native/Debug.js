@@ -1,7 +1,7 @@
-//import Native.Utils //
+/* global _elm_lang$core$Native_Utils */
 
-var _elm_lang$core$Native_Debug = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Debug = (function _elm_lang$core$Native_Debug() {
 function log(tag, value)
 {
 	var msg = tag + ': ' + _elm_lang$core$Native_Utils.toString(value);
@@ -26,5 +26,4 @@ return {
 	crash: crash,
 	log: F2(log)
 };
-
-}();
+})();
