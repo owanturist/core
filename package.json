@@ -1,0 +1,12 @@
+{
+  "name": "core",
+  "version": "5.1.1",
+  "description": "Elm's standard libraries",
+  "main": "index.js",
+  "repository": "https://github.com/owanturist/core.git",
+  "author": "Anton Ovechkin <owanturist@gmail.com>",
+  "license": "BSD3",
+  "devDependencies": {
+    "eslint": "^4.0.0"
+  }
+}
