@@ -1,4 +1,7 @@
-/* global _elm_lang$core$Result$Err, _elm_lang$core$Result$Ok */
+/* global
+	_elm_lang$core$Result$Err
+	_elm_lang$core$Result$Ok
+*/
 
 // eslint-disable-next-line camelcase, brace-style
 var _elm_lang$core$Native_Date = (function _elm_lang$core$Native_Date() {

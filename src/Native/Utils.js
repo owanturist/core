@@ -1,7 +1,7 @@
 /* global
-	_elm_lang$core$Native_Array,
-	_elm_lang$core$Array$toList,
-	_elm_lang$core$Dict$toList,
+	_elm_lang$core$Native_Array
+	_elm_lang$core$Array$toList
+	_elm_lang$core$Dict$toList
 	_elm_lang$core$Set$toList
 */
 

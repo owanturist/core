@@ -1,4 +1,6 @@
-/* global _elm_lang$core$Native_Utils */
+/* global
+	_elm_lang$core$Native_Utils
+*/
 
 // eslint-disable-next-line camelcase, brace-style
 var _elm_lang$core$Native_Debug = (function _elm_lang$core$Native_Debug() {

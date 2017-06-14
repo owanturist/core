@@ -1,10 +1,10 @@
 /* global
-	_elm_lang$virtual_dom$VirtualDom$program,
-	_elm_lang$core$Json_Decode$decodeValue,
-	_elm_lang$core$Native_Scheduler,
-	_elm_lang$core$Native_List,
-	_elm_lang$core$Native_Json,
+	_elm_lang$virtual_dom$VirtualDom$program
+	_elm_lang$core$Native_Json
+	_elm_lang$core$Native_List
+	_elm_lang$core$Native_Scheduler
 	_elm_lang$core$Native_Utils
+	_elm_lang$core$Json_Decode$decodeValue
 */
 
 // eslint-disable-next-line camelcase, brace-style

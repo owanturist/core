@@ -1,4 +1,6 @@
-/* global _elm_lang$core$Native_List */
+/* global
+	_elm_lang$core$Native_List
+*/
 
 // eslint-disable-next-line camelcase, brace-style
 var _elm_lang$core$Native_Array = (function _elm_lang$core$Native_Array() {

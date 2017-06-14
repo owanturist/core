@@ -1,10 +1,10 @@
 /* global
-	_elm_lang$core$Native_Array,
-	_elm_lang$core$Native_List,
-	_elm_lang$core$Native_Utils,
-	_elm_lang$core$Maybe$Nothing,
-	_elm_lang$core$Maybe$Just,
-	_elm_lang$core$Result$Err,
+	_elm_lang$core$Native_Array
+	_elm_lang$core$Native_List
+	_elm_lang$core$Native_Utils
+	_elm_lang$core$Maybe$Nothing
+	_elm_lang$core$Maybe$Just
+	_elm_lang$core$Result$Err
 	_elm_lang$core$Result$Ok
 */
 
