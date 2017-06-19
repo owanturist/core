@@ -1,7 +1,9 @@
-//import Native.Utils //
+/* global
+	_elm_lang$core$Native_Utils
+*/
 
-var _elm_lang$core$Native_Scheduler = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Scheduler = (function _elm_lang$core$Native_Scheduler() {
 var MAX_STEPS = 10000;
 
 
@@ -78,7 +80,8 @@ function rawSpawn(task)
 
 function spawn(task)
 {
-	return nativeBinding(function(callback) {
+	return nativeBinding(function job(callback)
+	{
 		var process = rawSpawn(task);
 		callback(succeed(process));
 	});
@@ -92,7 +95,8 @@ function rawSend(process, msg)
 
 function send(process, msg)
 {
-	return nativeBinding(function(callback) {
+	return nativeBinding(function job(callback)
+	{
 		rawSend(process, msg);
 		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
 	});
@@ -100,7 +104,8 @@ function send(process, msg)
 
 function kill(process)
 {
-	return nativeBinding(function(callback) {
+	return nativeBinding(function job(callback)
+	{
 		var root = process.root;
 		if (root.ctor === '_Task_nativeBinding' && root.cancel)
 		{
@@ -115,12 +120,14 @@ function kill(process)
 
 function sleep(time)
 {
-	return nativeBinding(function(callback) {
-		var id = setTimeout(function() {
+	return nativeBinding(function job(callback)
+	{
+		var id = setTimeout(function timeout()
+		{
 			callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
 		}, time);
 
-		return function() { clearTimeout(id); };
+		return function unSleep() { clearTimeout(id); };
 	});
 }
 
@@ -191,7 +198,8 @@ function step(numSteps, process)
 
 		if (ctor === '_Task_nativeBinding')
 		{
-			process.root.cancel = process.root.callback(function(newRoot) {
+			process.root.cancel = process.root.callback(function job(newRoot)
+			{
 				process.root = newRoot;
 				enqueue(process);
 			});
@@ -277,5 +285,4 @@ return {
 	rawSpawn: rawSpawn,
 	rawSend: rawSend
 };
-
-}();
+})();
