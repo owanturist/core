@@ -1,7 +1,11 @@
-//import Maybe, Native.List //
+/* global
+	_elm_lang$core$Native_List
+	_elm_lang$core$Maybe$Nothing
+	_elm_lang$core$Maybe$Just
+*/
 
-var _elm_lang$core$Native_Regex = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Regex = (function _elm_lang$core$Native_Regex() {
 function escape(str)
 {
 	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -38,6 +42,7 @@ function find(n, re, str)
 		{
 			var submatch = result[i];
 			subs[--i] = submatch === undefined
+				// eslint-disable-next-line camelcase
 				? _elm_lang$core$Maybe$Nothing
 				: _elm_lang$core$Maybe$Just(submatch);
 		}
@@ -69,6 +74,7 @@ function replace(n, re, replacer, string)
 		{
 			var submatch = arguments[i];
 			submatches[--i] = submatch === undefined
+				// eslint-disable-next-line camelcase
 				? _elm_lang$core$Maybe$Nothing
 				: _elm_lang$core$Maybe$Just(submatch);
 		}
@@ -115,5 +121,4 @@ return {
 	replace: F4(replace),
 	split: F3(split)
 };
-
-}();
+})();
