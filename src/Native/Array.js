@@ -1,7 +1,9 @@
-//import Native.List //
+/* global
+	_elm_lang$core$Native_List
+*/
 
-var _elm_lang$core$Native_Array = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_Array = (function _elm_lang$core$Native_Array() {
 // A RRB-Tree has two distinct data types.
 // Leaf -> "height"  is always 0
 //         "table"   is an array of elements
@@ -114,17 +116,17 @@ function initialize_(f, h, from, to)
 	}
 
 	var step = Math.pow(M, h);
-	var table = new Array(Math.ceil((to - from) / step));
-	var lengths = new Array(table.length);
-	for (var i = 0; i < table.length; i++)
+	var table_ = new Array(Math.ceil((to - from) / step));
+	var lengths = new Array(table_.length);
+	for (var j = 0; j < table_.length; j++)
 	{
-		table[i] = initialize_(f, h - 1, from + (i * step), Math.min(from + ((i + 1) * step), to));
-		lengths[i] = length(table[i]) + (i > 0 ? lengths[i-1] : 0);
+		table_[j] = initialize_(f, h - 1, from + (j * step), Math.min(from + ((j + 1) * step), to));
+		lengths[j] = length(table_[j]) + (j > 0 ? lengths[j - 1] : 0);
 	}
 	return {
 		ctor: '_Array',
 		height: h,
-		table: table,
+		table: table_,
 		lengths: lengths
 	};
 }
@@ -151,12 +153,11 @@ function fromList(list)
 		// next node.
 		if (i === M)
 		{
-			var leaf = {
+			fromListPush({
 				ctor: '_Array',
 				height: 0,
 				table: table
-			};
-			fromListPush(leaf, nodes);
+			}, nodes);
 			table = new Array(M);
 			i = 0;
 		}
@@ -165,12 +166,11 @@ function fromList(list)
 	// Maybe there is something left on the table.
 	if (i > 0)
 	{
-		var leaf = {
+		fromListPush({
 			ctor: '_Array',
 			height: 0,
 			table: table.splice(0, i)
-		};
-		fromListPush(leaf, nodes);
+		}, nodes);
 	}
 
 	// Go through all of the nodes and eventually push them into higher nodes.
@@ -187,10 +187,7 @@ function fromList(list)
 	{
 		return head.table[0];
 	}
-	else
-	{
-		return head;
-	}
+	return head;
 }
 
 // Push a node into a higher node as a child.
@@ -253,18 +250,13 @@ function push_(item, a)
 	{
 		if (a.table.length < M)
 		{
-			var newA = {
+			return {
 				ctor: '_Array',
 				height: 0,
-				table: a.table.slice()
+				table: a.table.concat([item])
 			};
-			newA.table.push(item);
-			return newA;
 		}
-		else
-		{
-		  return null;
-		}
+		return null;
 	}
 
 	// Recursively push
@@ -286,15 +278,12 @@ function push_(item, a)
 	if (a.table.length < M)
 	{
 		var newSlot = create(item, a.height - 1);
-		var newA = nodeCopy(a);
-		newA.table.push(newSlot);
-		newA.lengths.push(newA.lengths[newA.lengths.length - 1] + length(newSlot));
-		return newA;
+		var newA_ = nodeCopy(a);
+		newA_.table.push(newSlot);
+		newA_.lengths.push(newA_.lengths[newA_.lengths.length - 1] + length(newSlot));
+		return newA_;
 	}
-	else
-	{
-		return null;
-	}
+	return null;
 }
 
 // Converts an array into a list of elements.
@@ -359,7 +348,7 @@ function indexedMap_(f, a, from)
 		newA.table[i] =
 			a.height === 0
 				? A2(f, from + i, a.table[i])
-				: indexedMap_(f, a.table[i], i == 0 ? from : from + a.lengths[i - 1]);
+				: indexedMap_(f, a.table[i], i === 0 ? from : from + a.lengths[i - 1]);
 	}
 	return newA;
 }
@@ -375,9 +364,9 @@ function foldl(f, b, a)
 	}
 	else
 	{
-		for (var i = 0; i < a.table.length; i++)
+		for (var j = 0; j < a.table.length; j++)
 		{
-			b = foldl(f, b, a.table[i]);
+			b = foldl(f, b, a.table[j]);
 		}
 	}
 	return b;
@@ -394,9 +383,9 @@ function foldr(f, b, a)
 	}
 	else
 	{
-		for (var i = a.table.length; i--; )
+		for (var j = a.table.length; j--; )
 		{
-			b = foldr(f, b, a.table[i]);
+			b = foldr(f, b, a.table[j]);
 		}
 	}
 	return b;
@@ -427,9 +416,11 @@ function sliceRight(to, a)
 	// Handle leaf level.
 	if (a.height === 0)
 	{
-		var newA = { ctor:'_Array', height:0 };
-		newA.table = a.table.slice(0, to);
-		return newA;
+		return {
+			ctor: '_Array',
+			height: 0,
+			table: a.table.slice(0, to)
+		};
 	}
 
 	// Slice the right recursively.
@@ -467,9 +458,11 @@ function sliceLeft(from, a)
 	// Handle leaf level.
 	if (a.height === 0)
 	{
-		var newA = { ctor:'_Array', height:0 };
-		newA.table = a.table.slice(from, a.table.length + 1);
-		return newA;
+		return {
+			ctor: '_Array',
+			height: 0,
+			table: a.table.slice(from, a.table.length + 1)
+		};
 	}
 
 	// Slice the left recursively.
@@ -501,7 +494,7 @@ function sliceLeft(from, a)
 }
 
 // Appends two trees.
-function append(a,b)
+function append(a, b)
 {
 	if (a.table.length === 0)
 	{
@@ -575,20 +568,20 @@ function append_(a, b)
 		else if (a.height > b.height)
 		{
 			a = nodeCopy(a);
-			var appended = append_(botRight(a), b);
+			var appended_ = append_(botRight(a), b);
 
-			insertRight(a, appended[0]);
-			b = parentise(appended[1], appended[1].height + 1);
+			insertRight(a, appended_[0]);
+			b = parentise(appended_[1], appended_[1].height + 1);
 		}
 		else
 		{
 			b = nodeCopy(b);
-			var appended = append_(a, botLeft(b));
+			var appended__ = append_(a, botLeft(b));
 
-			var left = appended[0].table.length === 0 ? 0 : 1;
+			var left = appended__[0].table.length === 0 ? 0 : 1;
 			var right = left === 0 ? 1 : 0;
-			insertLeft(b, appended[left]);
-			a = parentise(appended[right], appended[right].height + 1);
+			insertLeft(b, appended__[left]);
+			a = parentise(appended__[right], appended__[right].height + 1);
 		}
 	}
 
@@ -632,9 +625,9 @@ function insertLeft(parent, node)
 	else
 	{
 		parent.table.shift();
-		for (var i = 1; i < parent.lengths.length; i++)
+		for (var j = 1; j < parent.lengths.length; j++)
 		{
-			parent.lengths[i] = parent.lengths[i] - parent.lengths[0];
+			parent.lengths[j] = parent.lengths[j] - parent.lengths[0];
 		}
 		parent.lengths.shift();
 	}
@@ -648,9 +641,9 @@ function calcToRemove(a, b)
 	{
 		subLengths += a.table[i].table.length;
 	}
-	for (var i = 0; i < b.table.length; i++)
+	for (var j = 0; j < b.table.length; j++)
 	{
-		subLengths += b.table[i].table.length;
+		subLengths += b.table[j].table.length;
 	}
 
 	var toRemove = a.table.length + b.table.length;
@@ -690,20 +683,20 @@ function saveSlot(a, b, index, slot)
 
 // Creates a node or leaf with a given length at their arrays for perfomance.
 // Is only used by shuffle.
-function createNode(h, length)
+function createNode(h, len)
 {
-	if (length < 0)
+	if (len < 0)
 	{
-		length = 0;
+		len = 0;
 	}
 	var a = {
 		ctor: '_Array',
 		height: h,
-		table: new Array(length)
+		table: new Array(len)
 	};
 	if (h > 0)
 	{
-		a.lengths = new Array(length);
+		a.lengths = new Array(len);
 	}
 	return a;
 }
@@ -712,7 +705,10 @@ function createNode(h, length)
 function shuffle(a, b, toRemove)
 {
 	var newA = createNode(a.height, Math.min(M, a.table.length + b.table.length - toRemove));
-	var newB = createNode(a.height, newA.table.length - (a.table.length + b.table.length - toRemove));
+	var newB = createNode(
+		a.height,
+		newA.table.length - (a.table.length + b.table.length - toRemove)
+	);
 
 	// Skip the slots with size M. More precise: copy the slot references
 	// to the new node
@@ -819,10 +815,7 @@ function length(array)
 	{
 		return array.table.length;
 	}
-	else
-	{
-		return array.lengths[array.lengths.length - 1];
-	}
+	return array.lengths[array.lengths.length - 1];
 }
 
 // Calculates in which slot of "table" the item probably is, then
@@ -933,7 +926,12 @@ function fromJSArray_(jsArray, h, from, to)
 	var lengths = new Array(table.length);
 	for (var i = 0; i < table.length; i++)
 	{
-		table[i] = fromJSArray_(jsArray, h - 1, from + (i * step), Math.min(from + ((i + 1) * step), to));
+		table[i] = fromJSArray_(
+			jsArray,
+			h - 1,
+			from + (i * step),
+			Math.min(from + ((i + 1) * step), to)
+		);
 		lengths[i] = length(table[i]) + (i > 0 ? lengths[i - 1] : 0);
 	}
 	return {
@@ -963,5 +961,4 @@ return {
 	toJSArray: toJSArray,
 	fromJSArray: fromJSArray
 };
-
-}();
+})();
