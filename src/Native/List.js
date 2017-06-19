@@ -1,7 +1,9 @@
-//import Native.Utils //
+/* global
+	_elm_lang$core$Native_Utils
+*/
 
-var _elm_lang$core$Native_List = function() {
-
+// eslint-disable-next-line camelcase, brace-style
+var _elm_lang$core$Native_List = (function _elm_lang$core$Native_List() {
 var Nil = { ctor: '[]' };
 
 function Cons(hd, tl)
@@ -104,14 +106,16 @@ function map5(f, vs, ws, xs, ys, zs)
 
 function sortBy(f, xs)
 {
-	return fromArray(toArray(xs).sort(function(a, b) {
+	return fromArray(toArray(xs).sort(function sorter(a, b)
+	{
 		return _elm_lang$core$Native_Utils.cmp(f(a), f(b));
 	}));
 }
 
 function sortWith(f, xs)
 {
-	return fromArray(toArray(xs).sort(function(a, b) {
+	return fromArray(toArray(xs).sort(function sorter(a, b)
+	{
 		var ord = f(a)(b).ctor;
 		return ord === 'EQ' ? 0 : ord === 'LT' ? -1 : 1;
 	}));
@@ -133,5 +137,4 @@ return {
 	sortBy: F2(sortBy),
 	sortWith: F2(sortWith)
 };
-
-}();
+})();
